@@ -1,0 +1,16 @@
+* {
+    font-family: 'Vollkorn', serif !important;
+}
+
+header, main, footer {
+    padding-left: 300px;
+    font-family: 'Vollkorn', serif !important;
+
+  }
+
+  @media only screen and (max-width : 992px) {
+    header, main, footer {
+      padding-left: 0;
+    }
+  }
+
