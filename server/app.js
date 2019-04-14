@@ -8,11 +8,17 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors')
 const routes = require('./routes')
 
-
-mongoose.connect('mongodb://localhost/mini_wp', { 
+mongoose.connect(`${process.env.MONGO_URL}`, { 
   useNewUrlParser: true,
   useCreateIndex: true 
-});
+})
+.then(() => {
+  console.log(('==== MongoDB Conected ===='));
+})
+.catch(err => {
+  console.log(err);
+})
+
 
 app
     .use(express.json())

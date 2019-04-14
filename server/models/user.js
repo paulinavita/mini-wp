@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
                     }, message : 'Email has been taken'
             }
         ]
+    },
+    created_at : {
+        type : Date,
+        default : new Date()
     }
 })
 

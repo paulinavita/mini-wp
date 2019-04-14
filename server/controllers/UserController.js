@@ -4,10 +4,10 @@ const bcrypt = require('bcryptjs')
 const { randomizer } = require('../helpers/randomizer')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const axios = require('axios')
 
 class UserController {
     static register(req, res) {
-        console.log(req.body)
     User.create({ ...req.body })
         .then(saved => {
             console.log('berhasil bikin user')
@@ -51,15 +51,21 @@ class UserController {
     }
 
     static local(req, res) {
-        console.log(req.body, 'local signin')
+        console.log(req.body, '....')
+        if (req.body.email == '') {
+            res.status(400).json({message : 'Username cannot be empty!'})
+        }
+        if (req.body.password == '') {
+            res.status(400).json({message : 'Password cannot be empty!'})
+        }
         User.findOne({
-            username: req.body.username
+            email: req.body.email
         })
         .then((user) => {
             console.log('ini yg login', user)
             if (!user) {
                 res.status(400).json({
-                    msg: 'Username not found'
+                    msg: 'Email not found'
                 })
             } else {
                 if (!bcrypt.compareSync(req.body.password, user.password)) {
@@ -74,7 +80,7 @@ class UserController {
                         username
                     }, process.env.JWT_SECRET);
                     console.log(token, 'dpt tokeeen')
-                    res.status(200).json({ token, _id, username })
+                    res.status(200).json({ token, _id, username, email })
                 }
             }
         })
@@ -130,6 +136,26 @@ class UserController {
         .catch(err => {
             console.log('ini google error')
             res.status(500).json({ err })
+        })
+    }
+
+    static getLoc(req, res) {
+        axios.get(`http://ipgeolocationapi.com/api/geolocate`)
+        .then(({data}) => {
+            res.status(200).json(data)
+        })
+        .catch((err) => {
+            res.status(400).json(err)
+        })
+    }
+
+    static getQuotes(req,res) {
+        axios.get(`http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1`)
+        .then(({data}) => {
+            res.status(200).json(data)
+        })
+        .catch((err) => {
+            res.status(400).json(err)
         })
     }
 }

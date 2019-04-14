@@ -8,8 +8,8 @@ router.get('/', (req, res) => {
 })
 
 router.use('/signin', signin)
-router.use('/article', article)
-router.use('/user', user)
+router.use('/articles', article)
+router.use('/users', user)
 
 
 module.exports = router

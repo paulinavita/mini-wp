@@ -16,6 +16,10 @@ const articleSchema = new mongoose.Schema({
     createdAt : {
         type : Date,
         default : new Date()
+    },
+    image : {
+        type : String,
+        required : [true, 'You need to post with image']
     }
 })
 
